@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>SeuMoGi · K‑Pop Social</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Fuente bonita -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+        /* :root {
+            --bg: #050016;
+            --bg-soft: #0b0224;
+            --accent: #ff6ad5;
+            --accent2: #7b5cff;
+            --accent3: #4ef2ff;
+            --text: #f9f5ff;
+            --muted: #b8aee6;
+            --danger: #ff4b81;
+        } */
+
+        :root {
+            --transition-fast: 0.18s ease-out;
+            --transition-slow: 0.35s ease;
+        }
+
+        /* Tema GALAXY (por defecto) */
+        body[data-theme="galaxy"] {
+            --bg: #050016;
+            --bg-soft: #0b0224;
+            --accent: #ff6ad5;
+            --accent2: #7b5cff;
+            --accent3: #4ef2ff;
+            --text: #f9f5ff;
+            --muted: #b8aee6;
+            --danger: #ff4b81;
+        }
+
+        /* Tema CANDY POP */
+        body[data-theme="candy"] {
+            --bg: #fff5fb;
+            --bg-soft: #ffe9f7;
+            --accent: #ff7ac4;
+            --accent2: #ffb86c;
+            --accent3: #6ac5ff;
+            --text: #2b1030;
+            --muted: #8b6a8f;
+            --danger: #ff4b81;
+        }
+
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at top, #3b1d8f 0, #050016 45%, #000 100%);
+            color: var(--text);
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+        } */
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at top, #3b1d8f 0, #050016 45%, #000 100%);
+            color: var(--text);
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            transition: background var(--transition-slow), color var(--transition-slow);
+        }
+
+        body[data-theme="candy"] {
+            background: radial-gradient(circle at top, #ffe0f2 0, #fff5fb 40%, #ffe9f7 100%);
+        }
+
+        .menu-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+        }
+
+
+        .app {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .app {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.7));
+            border-radius: 24px;
+            padding: 1.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(18px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            background: conic-gradient(from 210deg, #ff6ad5, #7b5cff, #4ef2ff, #ff6ad5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #050016;
+            font-weight: 800;
+            font-size: 1.2rem;
+            box-shadow: 0 0 25px rgba(255, 106, 213, 0.7);
+        }
+
+        .logo-text-main {
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .logo-text-sub {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        h2 {
+            margin: 0 0 0.8rem;
+            font-size: 1.4rem;
+        }
+
+        p {
+            margin: 0 0 0.8rem;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0 1.2rem;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(5, 0, 22, 0.6);
+            color: var(--muted);
+            transition: all 0.18s ease-out;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #050016;
+            border-color: transparent;
+            box-shadow: 0 0 18px rgba(255, 106, 213, 0.7);
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 0.9rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 0.25rem;
+            color: var(--muted);
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 0.55rem 0.75rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(5, 0, 22, 0.7);
+            color: var(--text);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+        }
+
+        textarea {
+            border-radius: 18px;
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px rgba(255, 106, 213, 0.4);
+            background: rgba(5, 0, 22, 0.9);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.55rem 1.2rem;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #050016;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+            transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.7);
+        }
+
+        /* .btn-ghost {
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: none;
+        } */
+        .btn-ghost {
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: none;
+            cursor: pointer;
+            transition: background var(--transition-fast), color var(--transition-fast), border var(--transition-fast);
+        }
+
+        body[data-theme="candy"] .btn-ghost {
+            border-color: rgba(0, 0, 0, 0.12);
+        }
+
+
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .status {
+            margin-top: 0.6rem;
+            font-size: 0.8rem;
+            min-height: 1.2rem;
+        }
+
+        .status.ok {
+            color: var(--accent3);
+        }
+
+        .status.error {
+            color: var(--danger);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--muted);
+            margin-bottom: 0.6rem;
+        }
+
+        .badge-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: var(--accent3);
+            box-shadow: 0 0 10px rgba(78, 242, 255, 0.9);
+        }
+
+        .timeline-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .pill {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: var(--muted);
+        }
+
+        .user-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+        }
+
+        .avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 20%, #fff, #ff6ad5 40%, #7b5cff 70%, #050016 100%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #050016;
+        }
+
+        .posts {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+            max-height: 70vh;
+            overflow-y: auto;
+            padding-right: 0.4rem;
+        }
+
+        /* .post {
+            padding: 0.9rem 1rem;
+            border-radius: 18px;
+            background: rgba(5, 0, 22, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            gap: 0.8rem;
+        } */
+        .post {
+            padding: 0.9rem 1rem;
+            border-radius: 18px;
+            background: rgba(5, 0, 22, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            gap: 0.8rem;
+            opacity: 0;
+            transform: translateY(6px);
+            animation: post-in 0.25s var(--transition-fast) forwards;
+        }
+
+        @keyframes post-in {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        .post-type {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .post-user {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .post-username {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .post-content {
+            font-size: 0.9rem;
+            margin: 0.3rem 0;
+        }
+
+        .post-meta {
+            font-size: 0.75rem;
+            color: var(--muted);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            align-items: center;
+        }
+
+        .chip {
+            padding: 0.15rem 0.55rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            font-size: 0.7rem;
+        }
+
+        .chip-music {
+            border-color: var(--accent3);
+            color: var(--accent3);
+        }
+
+        .chip-theory {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .chip-time {
+            border-color: rgba(255, 255, 255, 0.16);
+        }
+
+        .scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+        }
+
+        .small {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .link {
+            color: var(--accent3);
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+        .user-hover-card {
+            position: absolute;
+            background: var(--bg-soft);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 0.8rem;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            z-index: 999;
+            width: 200px;
+            display: none;
+            animation: fadeIn 0.2s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+            .menu-bar {
+            width: 100%;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            font-family: Poppins, sans-serif;
+            margin-bottom: 20px;
+        }
+
+        .menu-logo {
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .menu-center {
+            display: flex;
+            gap: 12px;
+        }
+
+        .menu-btn {
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            cursor: pointer;
+            transition: 0.25s;
+            font-size: 0.9rem;
+        }
+
+        .menu-btn:hover {
+            background: linear-gradient(135deg, #ff6ad5, #7b5cff);
+            color: #050016;
+            transform: translateY(-2px);
+            box-shadow: 0 0 12px rgba(255, 106, 213, 0.6);
+        }
+
+        .logout-btn {
+            padding: 6px 14px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(135deg, #ff6ad5, #7b5cff);
+            color: #050016;
+            font-weight: 600;
+            transition: 0.25s;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 12px rgba(255, 106, 213, 0.6);
+        }
+    </style>
+    
+</head>
+
+<body data-theme="galaxy">
+    <nav class="menu-bar">
+        <div class="menu-logo" onclick="window.location.href='timeline.html'">
+            SeuMoGi
+        </div>
+
+        <div class="menu-center">
+            <div class="menu-btn" onclick="window.location.href='timeline.html'">Inicio</div>
+            <div class="menu-btn" onclick="window.location.href='global.html'">Global</div>
+            <div class="menu-btn" onclick="window.location.href='music.html'">🎵 Música</div>
+            <div class="menu-btn" onclick="window.location.href='theories.html'">🧠 Teorías</div>
+            <div class="menu-btn"
+                onclick="window.location.href='profile.html?id=' + localStorage.getItem('seumogi_user_id')">Mi Perfil
+            </div>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+    </nav>
+
+    <style>
+        .menu-bar {
+            width: 100%;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            font-family: Poppins, sans-serif;
+            margin-bottom: 20px;
+        }
+
+        .menu-logo {
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .menu-center {
+            display: flex;
+            gap: 12px;
+        }
+
+        .menu-btn {
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            cursor: pointer;
+            transition: 0.25s;
+            font-size: 0.9rem;
+        }
+
+        .menu-btn:hover {
+            background: linear-gradient(135deg, #ff6ad5, #7b5cff);
+            color: #050016;
+            transform: translateY(-2px);
+            box-shadow: 0 0 12px rgba(255, 106, 213, 0.6);
+        }
+
+        .logout-btn {
+            padding: 6px 14px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(135deg, #ff6ad5, #7b5cff);
+            color: #050016;
+            font-weight: 600;
+            transition: 0.25s;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 12px rgba(255, 106, 213, 0.6);
+        }
+    </style>
+
+    <script>
+        function logout() {
+            localStorage.removeItem('seumogi_token');
+            localStorage.removeItem('seumogi_user_id');
+            window.location.href = 'index.html';
+        }
+    </script>
+
+    <div class="app">
+        <!-- PANEL IZQUIERDO: AUTH -->
+        <section class="panel">
+            <div class="logo">
+                <div class="logo-icon">S</div>
+                <div>
+                    <div class="logo-text-main">SeuMoGi</div>
+                    <div class="logo-text-sub">K‑Pop multiverse timeline</div>
+                </div>
+            </div>
+
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Backend: Laravel 12 · API + Sanctum
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" data-tab="register">Registro</button>
+                <button class="tab" data-tab="login">Login</button>
+            </div>
+
+            <!-- REGISTRO -->
+            <div id="tab-register">
+                <h2>Crear cuenta</h2>
+                <p>Crea tu usuario para entrar al timeline K‑Pop y postear teorías, música y caos bonito.</p>
+
+                <div class="form-group">
+                    <label for="reg-name">Nombre</label>
+                    <input id="reg-name" type="text" placeholder="Ej: Uxía" />
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-username">Usuario</label>
+                    <input id="reg-username" type="text" placeholder="Ej: uxia_kpop" />
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-email">Email</label>
+                    <input id="reg-email" type="email" placeholder="Ej: uxia@example.com" />
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-password">Contraseña</label>
+                    <input id="reg-password" type="password" placeholder="Mínimo 6 caracteres" />
+                </div>
+
+                <button class="btn" id="btn-register">Registrarme</button>
+
+                <div class="status" id="status-register"></div>
+            </div>
+
+            <!-- LOGIN -->
+            <div id="tab-login" style="display:none;">
+                <h2>Iniciar sesión</h2>
+                <p>Entra con tu cuenta para ver tu timeline y seguir a tus biases.</p>
+
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input id="login-email" type="email" placeholder="uxia@example.com" />
+                </div>
+
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <input id="login-password" type="password" />
+                </div>
+
+                <button class="btn" id="btn-login">Entrar</button>
+
+                <div class="status" id="status-login"></div>
+
+                <p class="small" style="margin-top:1rem;">
+                    ¿No tienes cuenta?
+                    <a href="#" class="link" id="link-go-register">Crear una nueva</a>
+                </p>
+            </div>
+
+            <hr style="border-color: rgba(255,255,255,0.08); margin: 1.4rem 0;" />
+
+            <div>
+                <p class="small">
+                    Este frontend es solo una capa bonita encima de tu API Laravel 12.<br />
+                    Todo lo que ves aquí se guarda en tu base de datos `seumogi`.
+                </p>
+            </div>
+        </section>
+
+        <!-- PANEL DERECHO: TIMELINE -->
+        <!-- <section class="panel">
+            <div class="timeline-header">
+                <div>
+                    <h2>Timeline K‑Pop</h2>
+                    <p>Posts, teorías y música de la gente que sigues (y de ti).</p>
+                </div>
+                <div>
+                    <div class="user-pill" id="user-pill" style="display:none;">
+                        <div class="avatar" id="user-avatar">U</div>
+                        <div>
+                            <div id="user-name" style="font-size:0.8rem;font-weight:600;">Usuario</div>
+                            <div id="user-username" class="small">@username</div>
+                        </div>
+                    </div>
+                    <button class="btn-ghost" id="btn-logout" style="margin-top:0.4rem; display:none;">Cerrar
+                        sesión</button>
+                </div>
+            </div> -->
+        <section class="panel">
+            <div class="timeline-header">
+                <div>
+                    <h2>Timeline K‑Pop</h2>
+                    <p>Posts, teorías y música de la gente que sigues (y de ti).</p>
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:flex-end; gap:0.4rem;">
+                    <button class="btn-ghost" id="btn-theme-toggle">Modo Candy 🌈</button>
+                    <div>
+                        <div class="user-pill" id="user-pill" style="display:none;">
+                            <div class="avatar" id="user-avatar">U</div>
+                            <div>
+                                <div id="user-name" style="font-size:0.8rem;font-weight:600;">Usuario</div>
+                                <div id="user-username" class="small">@username</div>
+                            </div>
+                        </div>
+                        <button class="btn-ghost" id="btn-logout" style="margin-top:0.4rem; display:none;">Cerrar
+                            sesión</button>
+                        <div id="user-box">
+                            <div id="username"></div>
+                            <div id="handle"></div>
+                            <button onclick="logout()">Cerrar sesión</button>
+
+                            <div onclick="window.location.href='profile.html?id=' + localStorage.getItem('seumogi_user_id')"
+                                style="cursor:pointer; margin-top:8px; text-decoration:underline;">
+                                Mi perfil
+                            </div>
+
+                        </div>
+
+                        <div onclick="window.location.href='music.html'" style="cursor:pointer;">
+                            🎵 Música
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- FORM NUEVO POST -->
+            <div class="panel" style="padding:1rem; margin-bottom:1rem; background:rgba(5,0,22,0.9);">
+                <div class="form-group">
+                    <label for="post-type">Tipo de post</label>
+                    <select id="post-type"
+                        style="width:100%; padding:0.45rem 0.75rem; border-radius:999px; border:1px solid rgba(255,255,255,0.16); background:rgba(5,0,22,0.7); color:var(--text); font-size:0.85rem;">
+                        <option value="post">Post normal</option>
+                        <option value="theory">Teoría</option>
+                        <option value="music">Música</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="post-content">Contenido</label>
+                    <textarea id="post-content"
+                        placeholder="Cuéntame tu teoría loca de comeback, tu rant o tu recomendación de canción..."></textarea>
+                </div>
+
+                <div class="form-group" id="music-fields" style="display:none;">
+                    <label for="song-title">Título de la canción</label>
+                    <input id="song-title" type="text" placeholder="Ej: Supernova" />
+                    <label for="song-artist" style="margin-top:0.4rem;">Artista</label>
+                    <input id="song-artist" type="text" placeholder="Ej: aespa" />
+                    <label for="song-url" style="margin-top:0.4rem;">Enlace (YouTube, Spotify...)</label>
+                    <input id="song-url" type="text" placeholder="https://..." />
+                </div>
+
+                <button class="btn" id="btn-post" style="margin-top:0.4rem;">Publicar</button>
+                <div class="status" id="status-post"></div>
+            </div>
+
+            <!-- LISTA DE POSTS -->
+            <div class="posts scrollbar" id="posts">
+                <!-- Aquí se cargan los posts -->
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin + '/api';
+
+        let authToken = null;
+        let currentUser = null;
+
+        const tabs = document.querySelectorAll('.tab');
+        const tabRegister = document.getElementById('tab-register');
+        const tabLogin = document.getElementById('tab-login');
+        const statusRegister = document.getElementById('status-register');
+        const statusLogin = document.getElementById('status-login');
+        const statusPost = document.getElementById('status-post');
+        const postsContainer = document.getElementById('posts');
+        const userPill = document.getElementById('user-pill');
+        const userNameEl = document.getElementById('user-name');
+        const userUsernameEl = document.getElementById('user-username');
+        const userAvatarEl = document.getElementById('user-avatar');
+        const btnLogout = document.getElementById('btn-logout');
+        const musicFields = document.getElementById('music-fields');
+        const postTypeSelect = document.getElementById('post-type');
+
+        // THEME
+        const THEME_KEY = 'seumogi_theme';
+
+        function applyTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            const btn = document.getElementById('btn-theme-toggle');
+            if (!btn) return;
+            if (theme === 'candy') {
+                btn.textContent = 'Modo Galaxy 🌌';
+            } else {
+                btn.textContent = 'Modo Candy 🌈';
+            }
+        }
+
+        // Cargar tema guardado
+        const savedTheme = localStorage.getItem(THEME_KEY) || 'galaxy';
+        applyTheme(savedTheme);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnTheme = document.getElementById('btn-theme-toggle');
+            if (btnTheme) {
+                btnTheme.addEventListener('click', () => {
+                    const current = document.body.getAttribute('data-theme') || 'galaxy';
+                    const next = current === 'galaxy' ? 'candy' : 'galaxy';
+                    applyTheme(next);
+                    localStorage.setItem(THEME_KEY, next);
+                });
+            }
+        });
+
+
+        // Tabs
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                if (tab.dataset.tab === 'register') {
+                    tabRegister.style.display = '';
+                    tabLogin.style.display = 'none';
+                } else {
+                    tabRegister.style.display = 'none';
+                    tabLogin.style.display = '';
+                }
+            });
+        });
+
+        document.getElementById('link-go-register').addEventListener('click', (e) => {
+            e.preventDefault();
+            tabs.forEach(t => t.classList.remove('active'));
+            document.querySelector('.tab[data-tab="register"]').classList.add('active');
+            tabRegister.style.display = '';
+            tabLogin.style.display = 'none';
+        });
+
+        // Mostrar/ocultar campos de música
+        postTypeSelect.addEventListener('change', () => {
+            if (postTypeSelect.value === 'music') {
+                musicFields.style.display = '';
+            } else {
+                musicFields.style.display = 'none';
+            }
+        });
+
+        function setStatus(el, msg, type = 'ok') {
+            el.textContent = msg || '';
+            el.classList.remove('ok', 'error');
+            if (msg) el.classList.add(type);
+        }
+
+        function setUser(user) {
+            currentUser = user;
+            if (user) {
+                userPill.style.display = 'flex';
+                btnLogout.style.display = 'inline-flex';
+                userNameEl.textContent = user.name;
+                userUsernameEl.textContent = '@' + (user.username || '');
+                userAvatarEl.textContent = (user.username || user.name || '?')[0]?.toUpperCase() || 'U';
+            } else {
+                userPill.style.display = 'none';
+                btnLogout.style.display = 'none';
+            }
+        }
+
+        async function api(path, options = {}) {
+            const headers = options.headers || {};
+            headers['Accept'] = 'application/json';
+            if (!(options.body instanceof FormData)) {
+                headers['Content-Type'] = 'application/json';
+            }
+            if (authToken) {
+                headers['Authorization'] = 'Bearer ' + authToken;
+            }
+
+            const res = await fetch(API_BASE + path, {
+                ...options,
+                headers,
+            });
+
+            let data = null;
+            try {
+                data = await res.json();
+            } catch (e) {
+                // ignore
+            }
+
+            if (!res.ok) {
+                const msg = (data && (data.message || JSON.stringify(data))) || 'Error';
+                throw new Error(msg);
+            }
+
+            return data;
+        }
+
+        // Registro
+        document.getElementById('btn-register').addEventListener('click', async () => {
+            const name = document.getElementById('reg-name').value.trim();
+            const username = document.getElementById('reg-username').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const password = document.getElementById('reg-password').value;
+
+            setStatus(statusRegister, '');
+
+            if (!name || !username || !email || !password) {
+                setStatus(statusRegister, 'Rellena todos los campos.', 'error');
+                return;
+            }
+
+            try {
+                setStatus(statusRegister, 'Creando cuenta...', 'ok');
+                const data = await api('/register', {
+                    method: 'POST',
+                    body: JSON.stringify({ name, username, email, password }),
+                });
+
+                authToken = data.token;
+                setUser(data.user);
+                setStatus(statusRegister, 'Cuenta creada. Ya estás dentro 💜', 'ok');
+                loadTimeline();
+            } catch (e) {
+                setStatus(statusRegister, e.message, 'error');
+            }
+
+            localStorage.setItem('seumogi_user_id', data.user.id);
+            localStorage.setItem('seumogi_token', data.token);
+
+        });
+
+        // Login
+        document.getElementById('btn-login').addEventListener('click', async () => {
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            setStatus(statusLogin, '');
+
+            if (!email || !password) {
+                setStatus(statusLogin, 'Rellena email y contraseña.', 'error');
+                return;
+            }
+
+            try {
+                setStatus(statusLogin, 'Iniciando sesión...', 'ok');
+                const data = await api('/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, password }),
+                });
+
+                authToken = data.token;
+                setUser(data.user);
+                setStatus(statusLogin, 'Sesión iniciada 💜', 'ok');
+                loadTimeline();
+            } catch (e) {
+                setStatus(statusLogin, e.message, 'error');
+            }
+
+
+            localStorage.setItem('seumogi_user_id', data.user.id);
+            localStorage.setItem('seumogi_token', data.token);
+
+        });
+
+        // Logout
+        btnLogout.addEventListener('click', async () => {
+            try {
+                await api('/logout', { method: 'POST' });
+            } catch (e) {
+                // da igual si falla
+            }
+            authToken = null;
+            setUser(null);
+            postsContainer.innerHTML = '';
+            setStatus(statusPost, 'Has cerrado sesión.', 'ok');
+        });
+
+        // Crear post
+        document.getElementById('btn-post').addEventListener('click', async () => {
+            if (!authToken) {
+                setStatus(statusPost, 'Inicia sesión para postear.', 'error');
+                return;
+            }
+
+            const type = document.getElementById('post-type').value;
+            const content = document.getElementById('post-content').value.trim();
+            const song_title = document.getElementById('song-title').value.trim();
+            const song_artist = document.getElementById('song-artist').value.trim();
+            const song_url = document.getElementById('song-url').value.trim();
+
+            if (!content) {
+                setStatus(statusPost, 'Escribe algo antes de publicar.', 'error');
+                return;
+            }
+
+            const payload = { type, content };
+            if (type === 'music') {
+                payload.song_title = song_title || null;
+                payload.song_artist = song_artist || null;
+                payload.song_url = song_url || null;
+            }
+
+            try {
+                setStatus(statusPost, 'Publicando...', 'ok');
+                await api('/posts', {
+                    method: 'POST',
+                    body: JSON.stringify(payload),
+                });
+                setStatus(statusPost, 'Publicado 💜', 'ok');
+                document.getElementById('post-content').value = '';
+                document.getElementById('song-title').value = '';
+                document.getElementById('song-artist').value = '';
+                document.getElementById('song-url').value = '';
+                loadTimeline();
+            } catch (e) {
+                setStatus(statusPost, e.message, 'error');
+            }
+        });
+
+        function renderPosts(list) {
+            postsContainer.innerHTML = '';
+
+            if (!list || !list.data || list.data.length === 0) {
+                postsContainer.innerHTML = '<p class="small" style="opacity:0.8;">Todavía no hay posts en tu timeline. Sigue a alguien o publica algo tú 💜</p>';
+                return;
+            }
+
+            list.data.forEach(post => {
+                const el = document.createElement('article');
+                el.className = 'post';
+
+                const avatar = document.createElement('div');
+                avatar.className = 'avatar';
+                const uname = (post.user && (post.user.username || post.user.name)) || '?';
+                avatar.textContent = uname[0]?.toUpperCase() || 'U';
+
+                const body = document.createElement('div');
+
+                const header = document.createElement('div');
+                header.className = 'post-header';
+
+                // BOTÓN SEGUIR
+                const followBtn = document.createElement('button');
+                followBtn.className = 'btn-ghost';
+                followBtn.style.padding = '0.25rem 0.7rem';
+                followBtn.style.fontSize = '0.75rem';
+                followBtn.style.borderRadius = '999px';
+
+                // Estado inicial del botón
+                if (post.user && post.user.is_following) {
+                    followBtn.textContent = 'Siguiendo ✓';
+                    followBtn.style.color = 'var(--accent3)';
+                } else {
+                    followBtn.textContent = 'Seguir';
+                }
+
+                // Acción del botón
+                followBtn.addEventListener('click', async () => {
+                    if (!authToken) {
+                        alert('Inicia sesión para seguir usuarios');
+                        return;
+                    }
+
+                    try {
+                        if (post.user.is_following) {
+                            await api(`/follow/${post.user.id}`, { method: 'DELETE' });
+                            post.user.is_following = false;
+                            followBtn.textContent = 'Seguir';
+                            followBtn.style.color = 'var(--muted)';
+                        } else {
+                            await api(`/follow/${post.user.id}`, { method: 'POST' });
+                            post.user.is_following = true;
+                            followBtn.textContent = 'Siguiendo ✓';
+                            followBtn.style.color = 'var(--accent3)';
+                        }
+                    } catch (e) {
+                        console.error(e);
+                    }
+
+                    const reactions = document.createElement('div');
+                    reactions.style.display = 'flex';
+                    reactions.style.gap = '10px';
+                    reactions.style.marginTop = '8px';
+
+                    const emojis = [
+                        { type: 'heart', icon: '❤️' },
+                        { type: 'fire', icon: '🔥' },
+                        { type: 'cry', icon: '😭' },
+                        { type: 'mindblown', icon: '🤯' }
+                    ];
+
+                    emojis.forEach(r => {
+                        const btn = document.createElement('span');
+                        btn.textContent = r.icon;
+                        btn.style.cursor = 'pointer';
+                        btn.style.fontSize = '1.2rem';
+
+                        btn.addEventListener('click', async () => {
+                            await api(`/posts/${post.id}/react`, {
+                                method: 'POST',
+                                body: JSON.stringify({ reaction: r.type })
+                            });
+                        });
+
+                        reactions.appendChild(btn);
+                    });
+
+                    postEl.appendChild(reactions);
+
+                    const commentBtn = document.createElement('button');
+                    commentBtn.textContent = '💬 Comentarios';
+                    commentBtn.className = 'btn-ghost';
+                    commentBtn.style.marginTop = '8px';
+
+                    commentBtn.addEventListener('click', () => {
+                        window.location.href = `comments.html?post=${post.id}`;
+                    });
+
+                    postEl.appendChild(commentBtn);
+
+
+                });
+
+
+                const left = document.createElement('div');
+                const userLine = document.createElement('div');
+                userLine.className = 'post-user';
+                //userLine.textContent = post.user ? post.user.name : 'Usuario';
+
+                //userLine.textContent = post.user ? post.user.name : 'Usuario';
+                userLine.textContent = post.user ? post.user.name : 'Usuario';
+                userLine.style.cursor = 'pointer';
+                userLine.style.textDecoration = 'underline';
+                userLine.style.textUnderlineOffset = '3px';
+
+                userLine.addEventListener('click', () => {
+                    window.location.href = `profile.html?id=${post.user.id}`;
+                });
+
+                userLine.style.cursor = 'pointer';
+
+                userLine.addEventListener('mouseenter', (e) => {
+                    showHoverCard(post.user, e.pageX + 10, e.pageY + 10);
+                });
+
+                userLine.addEventListener('mouseleave', () => {
+                    hideHoverCard();
+                });
+
+                const usernameLine = document.createElement('div');
+                usernameLine.className = 'post-username';
+                usernameLine.textContent = post.user ? '@' + (post.user.username || '') : '';
+
+                left.appendChild(userLine);
+                left.appendChild(usernameLine);
+
+                const type = document.createElement('div');
+                type.className = 'post-type';
+                type.textContent = post.type === 'theory' ? 'Teoría'
+                    : post.type === 'music' ? 'Música'
+                        : 'Post';
+
+                header.appendChild(left);
+                header.appendChild(type);
+                header.appendChild(followBtn);
+
+
+                const content = document.createElement('div');
+                content.className = 'post-content';
+                content.textContent = post.content;
+
+                const meta = document.createElement('div');
+                meta.className = 'post-meta';
+
+                const created = document.createElement('span');
+                created.className = 'chip chip-time';
+                created.textContent = new Date(post.created_at).toLocaleString();
+
+                meta.appendChild(created);
+
+                if (post.type === 'music') {
+                    const chipMusic = document.createElement('span');
+                    chipMusic.className = 'chip chip-music';
+                    chipMusic.textContent = (post.song_title || 'Canción') + (post.song_artist ? ' · ' + post.song_artist : '');
+                    meta.appendChild(chipMusic);
+
+                    if (post.song_url) {
+                        const link = document.createElement('a');
+                        link.href = post.song_url;
+                        link.target = '_blank';
+                        link.rel = 'noopener noreferrer';
+                        link.className = 'link';
+                        link.textContent = 'Escuchar';
+                        meta.appendChild(link);
+                    }
+                }
+
+                if (post.type === 'theory') {
+                    const chipTheory = document.createElement('span');
+                    chipTheory.className = 'chip chip-theory';
+                    chipTheory.textContent = 'Teoría';
+                    meta.appendChild(chipTheory);
+                }
+
+                body.appendChild(header);
+                body.appendChild(content);
+                body.appendChild(meta);
+
+                el.appendChild(avatar);
+                el.appendChild(body);
+
+                postsContainer.appendChild(el);
+            });
+        }
+
+        async function loadTimeline() {
+            if (!authToken) {
+                postsContainer.innerHTML = '<p class="small" style="opacity:0.8;">Inicia sesión o regístrate para ver tu timeline 💜</p>';
+                return;
+            }
+
+            try {
+                postsContainer.innerHTML = '<p class="small" style="opacity:0.8;">Cargando timeline...</p>';
+                const data = await api('/timeline');
+                renderPosts(data);
+            } catch (e) {
+                postsContainer.innerHTML = '<p class="small" style="color:var(--danger);">Error al cargar el timeline: ' + e.message + '</p>';
+            }
+        }
+
+        // Estado inicial
+        setUser(null);
+        postsContainer.innerHTML = '<p class="small" style="opacity:0.8;">Inicia sesión o regístrate para ver tu timeline 💜</p>';
+
+
+        const hoverCard = document.getElementById('hover-card');
+
+        function showHoverCard(user, x, y) {
+            hoverCard.innerHTML = `
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+            <div class="avatar">${user.username[0].toUpperCase()}</div>
+            <div>
+                <div style="font-weight:600;">${user.name}</div>
+                <div class="small">@${user.username}</div>
+            </div>
+        </div>
+        <div class="small" style="margin-top:0.5rem;">Seguidores: ${user.followers_count}</div>
+        <div class="small">Siguiendo: ${user.following_count}</div>
+    `;
+            hoverCard.style.left = x + 'px';
+            hoverCard.style.top = y + 'px';
+            hoverCard.style.display = 'block';
+        }
+
+        function hideHoverCard() {
+            hoverCard.style.display = 'none';
+        }
+
+
+        function logout() {
+            localStorage.removeItem('seumogi_token');
+            localStorage.removeItem('seumogi_user_id');
+            window.location.href = 'index.html';
+        }
+
+
+    </script>
+
+    <div id="hover-card" class="user-hover-card"></div>
+
+</body>
+
+</html>

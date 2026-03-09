@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Comentarios · SeuMoGi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            background: radial-gradient(circle at top, #3b1d8f 0, #050016 45%, #000 100%);
+            color: #fff;
+            padding: 20px;
+        }
+
+        .menu-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+        }
+
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .post {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 1rem;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .comment {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.8rem;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+        }
+
+        .comment-user {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 80px;
+            border-radius: 12px;
+            padding: 0.7rem;
+            border: none;
+            outline: none;
+            resize: vertical;
+            font-family: Poppins;
+            margin-top: 10px;
+        }
+
+        .btn {
+            margin-top: 10px;
+            padding: 0.6rem 1.4rem;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(135deg, #ff6ad5, #7b5cff);
+            color: #050016;
+            font-weight: 600;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: #b8aee6;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="menu-bar">
+        <div class="menu-logo" onclick="window.location.href='timeline.html'">
+            SeuMoGi
+        </div>
+
+        <div class="menu-center">
+            <div class="menu-btn" onclick="window.location.href='timeline.html'">Inicio</div>
+            <div class="menu-btn" onclick="window.location.href='global.html'">Global</div>
+            <div class="menu-btn" onclick="window.location.href='music.html'">🎵 Música</div>
+            <div class="menu-btn" onclick="window.location.href='theories.html'">🧠 Teorías</div>
+            <div class="menu-btn"
+                onclick="window.location.href='profile.html?id=' + localStorage.getItem('seumogi_user_id')">Mi Perfil
+            </div>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+    </nav>
+
+    <style>
+        .menu-bar {
+            width: 100%;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            font-family: Poppins, sans-serif;
+            margin-bottom: 20px;
+        }
+
+        .menu-logo {
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .menu-center {
+            display: flex;
+            gap: 12px;
+        }
+
+        .menu-btn {
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            cursor: pointer;
+            transition: 0.25s;
+            font-size: 0.9rem;
+        }
+
+        .menu-btn:hover {
+            background: linear-gradient(135deg, #ff6ad5, #7b5cff);
+            color: #050016;
+            transform: translateY(-2px);
+            box-shadow: 0 0 12px rgba(255, 106, 213, 0.6);
+        }
+
+        .logout-btn {
+            padding: 6px 14px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(135deg, #ff6ad5, #7b5cff);
+            color: #050016;
+            font-weight: 600;
+            transition: 0.25s;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 12px rgba(255, 106, 213, 0.6);
+        }
+    </style>
+
+    <script>
+        function logout() {
+            localStorage.removeItem('seumogi_token');
+            localStorage.removeItem('seumogi_user_id');
+            window.location.href = 'index.html';
+        }
+    </script>
+
+
+
+    <div class="container">
+
+        <div class="back" onclick="history.back()">← Volver</div>
+
+        <h2>Comentarios</h2>
+
+        <div id="post" class="post">Cargando post...</div>
+
+        <h3>Todos los comentarios</h3>
+        <div id="comments"></div>
+
+        <h3>Escribir un comentario</h3>
+        <textarea id="comment-text" placeholder="Escribe algo bonito..."></textarea>
+        <button class="btn" id="send-comment">Enviar</button>
+
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin + '/api';
+        const params = new URLSearchParams(window.location.search);
+        const postId = params.get('post');
+        let authToken = localStorage.getItem('seumogi_token') || null;
+
+        async function api(path, options = {}) {
+            const headers = options.headers || {};
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+            if (authToken) headers['Authorization'] = 'Bearer ' + authToken;
+
+            const res = await fetch(API_BASE + path, { ...options, headers });
+            return await res.json();
+        }
+
+        async function loadPost() {
+            const data = await api('/posts/' + postId);
+
+            const postEl = document.getElementById('post');
+            postEl.innerHTML = `
+            <div style="font-weight:600; margin-bottom:6px;">${data.user.name}</div>
+            <div>${data.content}</div>
+        `;
+        }
+
+        async function loadComments() {
+            const list = await api('/posts/' + postId + '/comments');
+
+            const container = document.getElementById('comments');
+            container.innerHTML = '';
+
+            list.forEach(c => {
+                const el = document.createElement('div');
+                el.className = 'comment';
+                el.innerHTML = `
+                <div class="comment-user">${c.user.name}</div>
+                <div>${c.content}</div>
+            `;
+                container.appendChild(el);
+            });
+        }
+
+        document.getElementById('send-comment').addEventListener('click', async () => {
+            const text = document.getElementById('comment-text').value.trim();
+            if (!text) return;
+
+            await api('/posts/' + postId + '/comments', {
+                method: 'POST',
+                body: JSON.stringify({ content: text })
+            });
+
+            document.getElementById('comment-text').value = '';
+            loadComments();
+        });
+
+        loadPost();
+        loadComments();
+    </script>
+
+</body>
+
+</html>
